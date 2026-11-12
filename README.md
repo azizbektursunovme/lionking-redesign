@@ -70,7 +70,7 @@ Batafsil: [docs/sitemap.md](docs/sitemap.md), [docs/design-system.md](docs/desig
 ## Tezlik
 
 GitHub Pages preview, 2026-11-13: PageSpeed Insights bosh sahifa va Contact: telefonda 99, kompyuterda 100 (LCP 1.4–1.5 s, TBT 0 ms, CLS 0).
-Lighthouse 13.6 (Services, Fleet, Careers, About): telefonda 99–100, kompyuterda 100. Accessibility va Best Practices hamma joyda 100, tun rejimida ham.
+Lighthouse 13.6 (Services, Fleet, Careers, About): telefonda 99–100, kompyuterda 100. Accessibility va Best Practices hamma joyda 100 (tun rejimida bosh sahifa ham).
 SEO 63 faqat preview'dagi noindex sababli; asosiy domenda `PUBLIC_NOINDEX` bo'sh qoldiriladi.
 
 ## Ma'lumotlarni o'zgartirish
