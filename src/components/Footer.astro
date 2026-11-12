@@ -7,7 +7,7 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src={url('brand/logo-300.webp')} width="300" height="87" alt="" loading="lazy" style="width:180px;height:auto" />
+        <img src={url('brand/logo-light-300.webp')} srcset={`${url('brand/logo-light-300.webp')} 1x, ${url('brand/logo-light-600.webp')} 2x`} width="300" height="87" alt="" loading="lazy" style="width:180px;height:auto" />
         <p>Freight and logistics across all 48 states, from our headquarters in {company.city}, Ohio.</p>
         {(company.dot || company.mc) && (
           <p>{company.dot && <>USDOT {company.dot}<br /></>}{company.mc && <>MC {company.mc}</>}</p>

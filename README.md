@@ -7,6 +7,7 @@ Bu alohida repo; asosiy saytga ko'chirish dasturchi bilan kelishiladi.
 - Repo: https://github.com/azizbektursunovme/lionking-redesign
 
 - Uslub: **qora va oltin** (logotip ranglari), T-LOGISTICS redizayni bilan bir xil tuzilma: katta yuk mashinasi surati hero'da, hero ichida qisqa narx so'rash formasi, suratli xizmat kartalari, AQSh xaritasi, tepada shaffof navbar.
+- **Kun / tun mavzusi**: header'dagi oy/quyosh tugmasi; birinchi kirishda qurilma sozlamasiga qaraydi, tanlov eslab qolinadi ([docs/design-system.md](docs/design-system.md)).
 - Texnologiya: [Astro 7](https://astro.build), statik HTML, faqat kichik skriptlar (menyu, formalar, telefon havolasi).
 - Shrift: Archivo (o'zimizda, 35 KB). Tashqi CDN va kuzatuv skriptlari yo'q.
 - Suratlar: **vaqtinchalik** bepul litsenziyali suratlar (Wikimedia Commons), mualliflari `/credits/` da. Haqiqiy Lion King suratlari kelganda almashtiriladi.

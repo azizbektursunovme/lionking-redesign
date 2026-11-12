@@ -33,8 +33,15 @@ const items = [
   <div class="wrap site-header__bar">
     <a class="brand" href={url('/')} aria-label={`${company.name} home`}>
       <img
+        class="logo--on-light"
         src={url('brand/logo-300.webp')}
         srcset={`${url('brand/logo-300.webp')} 1x, ${url('brand/logo-600.webp')} 2x`}
+        width="300" height="87" alt=""
+      />
+      <img
+        class="logo--on-dark"
+        src={url('brand/logo-light-300.webp')}
+        srcset={`${url('brand/logo-light-300.webp')} 1x, ${url('brand/logo-light-600.webp')} 2x`}
         width="300" height="87" alt=""
       />
     </a>
@@ -51,6 +58,11 @@ const items = [
       <a class="header-phone" href={company.phoneHref} aria-label={`Call ${company.phone}`}><Icon name="phone" /><span class="header-phone__num">{company.phone}</span></a>
       <a class="btn btn--primary btn--small" href={url('contact/')}>Get a quote</a>
     </div>
+
+    <button class="theme-toggle" type="button" aria-label="Switch to night theme" title="Switch to night theme">
+      <Icon name="moon" class="icon icon--moon" />
+      <Icon name="sun" class="icon icon--sun" />
+    </button>
 
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-panel">
       <span class="nav-toggle__bars" aria-hidden="true"></span>
@@ -79,6 +91,31 @@ const items = [
 <script is:inline>(function(){var h=document.querySelector('.site-header');if(h&&window.scrollY<10)h.classList.add('is-top');})();</script>
 
 <script>
+  // Day/night switch. The theme itself is set before first paint in Base.astro;
+  // a choice made here is remembered on this device, otherwise the system setting is followed.
+  const themeBtn = document.querySelector<HTMLButtonElement>('.theme-toggle');
+  if (themeBtn) {
+    const root = document.documentElement;
+    const saved = () => { try { return localStorage.getItem('lk-theme'); } catch { return null; } };
+    const label = () => {
+      const text = root.dataset.theme === 'dark' ? 'Switch to day theme' : 'Switch to night theme';
+      themeBtn.setAttribute('aria-label', text);
+      themeBtn.title = text;
+    };
+    label();
+    themeBtn.addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('lk-theme', next); } catch { /* storage blocked: still switches for this page */ }
+      label();
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (saved()) return;
+      root.dataset.theme = e.matches ? 'dark' : 'light';
+      label();
+    });
+  }
+
   const header = document.querySelector<HTMLElement>('.site-header');
   const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
   const panel = document.getElementById('nav-panel');

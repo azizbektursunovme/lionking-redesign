@@ -15,8 +15,8 @@
 ```
 
 Yuqori qator (≥1024px): bosh ofis, email, "Dispatch 24/7" (USDOT/MC kelsa shu yerda).
-Header: logotip, Services, Fleet, Careers, About, Contact, telefon, "Get a quote". Tepada shaffof, scroll'da oq.
-Telefonda: logotip + "Menu"; menyu ichida 5 band, "Get a quote", "Drive with us", "Call".
+Header: logotip, Services, Fleet, Careers, About, Contact, telefon, "Get a quote", kun/tun tugmasi. Tepada shaffof, scroll'da oq (tun rejimida qora).
+Telefonda: logotip + kun/tun tugmasi + "Menu"; menyu ichida 5 band, "Get a quote", "Drive with us", "Call".
 Footer: logotip, Services (4 havola), Company, Contact, legal havolalar.
 
 ## `/`

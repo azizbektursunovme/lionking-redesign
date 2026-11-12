@@ -18,6 +18,24 @@ Tuzilma T-LOGISTICS redizayni bilan bir xil (Pinterest'dagi yuk tashish saytlari
 
 Qoida: oq fonda oltin hech qachon `--gold` emas, faqat `--gold-700` (eski saytdagi o'qilmaydigan oltin muammosi).
 
+## Kun / tun mavzusi
+
+Header'dagi oy/quyosh tugmasi saytni oq (kun) va qora (tun) rejimga o'tkazadi. Birinchi kirishda telefon/kompyuter sozlamasiga qaraydi, tanlov shu qurilmada eslab qolinadi (`localStorage`, kalit `lk-theme`). Mavzu sahifa chizilishidan oldin qo'yiladi, miltillash yo'q. JavaScript o'chiq bo'lsa sayt oq rejimda, tugma ko'rinmaydi.
+
+Tun rejimida (`<html data-theme="dark">`) faqat tokenlar almashadi:
+
+| Token | Kun | Tun |
+|---|---|---|
+| `--bg` (sahifa) | `#FFFFFF` | `#111113` |
+| `--surface` (kartalar, formalar, header) | `#FFFFFF` | `#1B1B1E` |
+| `--soft` | `#F5F5F4` | `#161618` |
+| `--ink` / `--text` / `--muted` | `#18181B` / `#3F3F46` / `#63636B` | `#F4F4F5` / `#D4D4D8` / `#A1A1AA` |
+| `--line` | `#E4E4E7` | `#2E2E33` |
+| `--gold-700` (oltin matn, havolalar) | `#7A5F0E` | `#E6C96A` |
+| `--gold-50` (ikonka doiralari) | `#FBF5E2` | `#2A2412` |
+
+Logotip: oq fonda asl logotip (qora "TRANSPORT CORP"), qora fonda (hero, footer, tun rejimi) yozuvi oq varianti `public/brand/logo-light-*.webp`.
+
 ## Shrift, oraliqlar, komponentlar
 
 - Archivo (variable), h1/h2 katta harflarda 800, matn 17px. Telefonda inputlar 17px (16px dan katta), tugmalar 48px (kichigi 44px).

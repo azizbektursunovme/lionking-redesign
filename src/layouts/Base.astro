@@ -44,6 +44,8 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Day/night theme before first paint: the visitor's saved choice, otherwise the system setting. -->
+    <script is:inline>(function(){var t;try{t=localStorage.getItem('lk-theme')}catch(e){}if(t!=='dark'&&t!=='light'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})();</script>
     <title>{title}</title>
     <meta name="description" content={description} />
     {hideFromSearch ? <meta name="robots" content="noindex, nofollow" /> : <link rel="canonical" href={canonical} />}
