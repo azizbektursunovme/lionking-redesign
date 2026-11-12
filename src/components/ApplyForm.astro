@@ -1,0 +1,210 @@
+---
+// Driver application form. Sends JSON to PUBLIC_APPLY_ENDPOINT (agree on it with the backend developer).
+// With no endpoint configured it runs in preview mode and sends nothing.
+// Preview a state with ?state=error or ?state=sending.
+import Icon from './Icon.astro';
+import { company, careers } from '../data/site';
+import { url } from '../lib/url';
+
+const endpoint = import.meta.env.PUBLIC_APPLY_ENDPOINT ?? '';
+---
+<div class="apply quote-card" data-endpoint={endpoint}>
+  {!endpoint && (
+    <p class="form-note" id="apply-preview-note">
+      <Icon name="info" />
+      <span><strong>Preview mode.</strong> This form is not connected to a server yet, so nothing you type is sent.</span>
+    </p>
+  )}
+
+  <form class="form" id="apply-form" novalidate>
+    <div class="alert alert--error" id="apply-error" role="alert" tabindex="-1" hidden>
+      <strong>Your application was not sent.</strong>
+      <span>Check your connection and try again, or call us at <a href={company.phoneHref}>{company.phone}</a>.</span>
+    </div>
+
+    <fieldset class="step" aria-labelledby="apply-step-1">
+      <div class="step__head">
+        <span class="step__num" aria-hidden="true">1</span>
+        <div>
+          <h3 class="step__title" id="apply-step-1">About you</h3>
+          <p class="step__hint">Our recruiting team contacts you by phone or email.</p>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field span-2">
+          <label class="label" for="a-name">Full name</label>
+          <div class="input-wrap"><Icon name="user" /><input class="input" id="a-name" name="name" autocomplete="name" required aria-describedby="a-name-err" /></div>
+          <p class="field-error" id="a-name-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="a-email">Email</label>
+          <div class="input-wrap"><Icon name="mail" /><input class="input" id="a-email" name="email" type="email" autocomplete="email" required placeholder="name@example.com" aria-describedby="a-email-err" /></div>
+          <p class="field-error" id="a-email-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="a-phone">Phone</label>
+          <div class="input-wrap"><Icon name="phone" /><input class="input" id="a-phone" name="phone" type="tel" autocomplete="tel" required pattern="[0-9()+.\s-]{10,20}" placeholder="(614) 555-0100" aria-describedby="a-phone-err" /></div>
+          <p class="field-error" id="a-phone-err"></p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="step" aria-labelledby="apply-step-2">
+      <div class="step__head">
+        <span class="step__num" aria-hidden="true">2</span>
+        <div>
+          <h3 class="step__title" id="apply-step-2">Your driving experience</h3>
+          <p class="step__hint">No CDL yet? Choose the last option and ask about CDL sponsorship.</p>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="label" for="a-position">Position</label>
+          <select class="input" id="a-position" name="position" required aria-describedby="a-position-err">
+            <option value="">Choose a position</option>
+            {careers.roles.map((r) => <option value={r.id}>{r.title}</option>)}
+          </select>
+          <p class="field-error" id="a-position-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="a-experience">Years of driving experience</label>
+          <select class="input" id="a-experience" name="experience" required aria-describedby="a-experience-err">
+            <option value="">Choose experience</option>
+            <option>Less than 1 year</option>
+            <option>1 to 3 years</option>
+            <option>3 to 5 years</option>
+            <option>5+ years</option>
+          </select>
+          <p class="field-error" id="a-experience-err"></p>
+        </div>
+        <div class="field span-2" role="radiogroup" aria-labelledby="a-cdl-label">
+          <span class="label" id="a-cdl-label">CDL license</span>
+          <div class="choice-cards choice-cards--3">
+            <label class="choice-card"><input type="radio" name="cdl" value="class-a" checked /><span><strong>CDL Class A</strong><span>Tractor-trailer</span></span></label>
+            <label class="choice-card"><input type="radio" name="cdl" value="class-b" /><span><strong>CDL Class B</strong><span>Straight truck</span></span></label>
+            <label class="choice-card"><input type="radio" name="cdl" value="none" /><span><strong>No CDL yet</strong><span>Willing to get one</span></span></label>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label class="label" for="a-message">Tell us about yourself <span class="opt">(optional)</span></label>
+          <div class="input-wrap input-wrap--top"><Icon name="note" /><textarea class="input" id="a-message" name="message" rows="3" placeholder="Routes you prefer, home time, when you can start"></textarea></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="step step--send">
+      <p class="hint">By applying you agree to our <a href={url('privacy-policy/')}>Privacy Policy</a> and <a href={url('terms-of-service/')}>Terms of Service</a>.</p>
+      <div class="form-actions">
+        <button class="btn btn--primary btn--lg" type="submit" id="apply-submit">Submit application</button>
+        <p class="hint">Our recruiting team replies by phone or email.</p>
+        <span class="sr-only" id="apply-status" aria-live="polite"></span>
+      </div>
+    </div>
+  </form>
+
+  <div class="success" id="apply-success" hidden>
+    <span class="success__icon"><Icon name="check" /></span>
+    <h3 tabindex="-1" id="apply-success-title">Application sent</h3>
+    <p>Thank you. Our recruiting team will contact you by phone or email. Questions now? Call <a href={company.phoneHref}>{company.phone}</a>.</p>
+    <p class="hint" id="apply-success-preview" hidden>Preview mode: nothing was actually sent.</p>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.apply');
+  const form = document.getElementById('apply-form') as HTMLFormElement | null;
+
+  if (root && form) {
+    const endpoint = root.dataset.endpoint || '';
+    const submit = document.getElementById('apply-submit') as HTMLButtonElement;
+    const status = document.getElementById('apply-status')!;
+    const errorBox = document.getElementById('apply-error')!;
+    const success = document.getElementById('apply-success')!;
+    const successTitle = document.getElementById('apply-success-title')!;
+    const previewNote = document.getElementById('apply-success-preview')!;
+    const previewBanner = document.getElementById('apply-preview-note');
+    const forced = new URLSearchParams(location.search).get('state');
+
+    const messages: Record<string, string> = {
+      name: 'Enter your full name.',
+      email: 'Enter an email address like name@example.com.',
+      phone: 'Enter a phone number with area code, for example 614 555 0100.',
+      position: 'Choose the position you are applying for.',
+      experience: 'Choose your years of driving experience.',
+    };
+    const slotFor = (el: HTMLElement) => document.getElementById(`${el.id}-err`);
+
+    const validate = () => {
+      let first: HTMLInputElement | null = null;
+      for (const el of Array.from(form.querySelectorAll<HTMLInputElement>('input.input, textarea.input, select.input'))) {
+        const blank = el.required && !el.value.trim();
+        const slot = slotFor(el);
+        if (!blank && el.checkValidity()) { el.removeAttribute('aria-invalid'); if (slot) slot.textContent = ''; continue; }
+        el.setAttribute('aria-invalid', 'true');
+        if (slot) slot.textContent = messages[el.name] || 'Check this field.';
+        first ??= el;
+      }
+      first?.focus();
+      return !first;
+    };
+
+    form.addEventListener('input', (e) => {
+      const el = e.target as HTMLInputElement;
+      if (el.getAttribute('aria-invalid') === 'true' && el.checkValidity() && el.value.trim()) {
+        el.removeAttribute('aria-invalid');
+        const slot = slotFor(el); if (slot) slot.textContent = '';
+      }
+    });
+
+    const setSending = (on: boolean) => {
+      submit.disabled = on;
+      submit.textContent = on ? 'Sending application…' : 'Submit application';
+      form.setAttribute('aria-busy', String(on));
+      status.textContent = on ? 'Sending your application.' : '';
+    };
+
+    const send = async (payload: Record<string, unknown>) => {
+      if (!endpoint) {
+        if (forced === 'sending') return new Promise<void>(() => {});
+        await new Promise((r) => setTimeout(r, 900));
+        if (forced === 'error') throw new Error('preview error');
+        return;
+      }
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload), signal: ctrl.signal,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      } finally { clearTimeout(timer); }
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.hidden = true;
+      if (!validate()) return;
+      const d = new FormData(form);
+      const payload = {
+        name: d.get('name'), email: d.get('email'), phone: d.get('phone'),
+        position: d.get('position'), experience: d.get('experience'), cdl: d.get('cdl'),
+        message: d.get('message') || null, source: 'website-driver-application', submittedAt: new Date().toISOString(),
+      };
+      setSending(true);
+      try {
+        await send(payload);
+        previewNote.hidden = Boolean(endpoint);
+        form.hidden = true;
+        if (previewBanner) previewBanner.hidden = true;
+        success.hidden = false;
+        successTitle.focus();
+      } catch {
+        errorBox.hidden = false;
+        errorBox.focus();
+      } finally {
+        setSending(false);
+      }
+    });
+  }
+</script>

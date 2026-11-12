@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { company, values } from '../data/site';
+import { url } from '../lib/url';
+
+const aboutStats = [
+  { value: company.founded, label: 'Founded' },
+  { value: '10', label: 'Late-model trucks' },
+  { value: '1,000+', label: 'Deliveries completed' },
+  { value: '48', label: 'States covered' },
+];
+---
+<Base
+  title="About us | Lion King Transport Corp"
+  description={`${company.name} was founded in ${company.founded} and runs freight across all 48 states from ${company.city}, Ohio.`}
+  current="about"
+>
+  <section class="page-hero">
+    <Photo name="band-about" widths={[800, 1440]} sizes="100vw" width={1440} height={810} alt="" eager />
+    <div class="wrap page-hero__inner">
+      <h1>Built on trust, driven by excellence</h1>
+      <p class="lede">Founded in {company.founded} with a single truck, {company.name} now runs ten late-model Freightliner sleepers from {company.city}, Ohio.</p>
+    </div>
+  </section>
+
+  <div class="wrap stats-wrap">
+    <ul class="stats" aria-label="Company facts">
+      {aboutStats.map((s) => <li><span class="stats__value">{s.value}</span><span class="stats__label">{s.label}</span></li>)}
+    </ul>
+  </div>
+
+  <section class="section" aria-labelledby="mission-title">
+    <div class="wrap split">
+      <div class="split__copy">
+        <h2 id="mission-title">Moving America forward</h2>
+        <p>Our mission is to provide reliable, efficient and safe freight transportation, while creating real opportunities for our drivers and lasting partnerships with our clients.</p>
+        <p>We believe that when our drivers thrive, our clients win and our business grows. This people-first idea is at the heart of everything we do.</p>
+        <blockquote class="pull">“Every mile we drive, every delivery we make, it's not just freight. It's someone's business, someone's livelihood. We treat it that way.”<cite>CEO, {company.name}</cite></blockquote>
+      </div>
+      <div class="split__copy">
+        <h2>Our vision</h2>
+        <p>To become one of the most trusted names in American logistics, known for reliability and for our commitment to the people who keep this country moving.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="values-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="values-title">What we stand for</h2>
+        <p>These principles guide every route we plan and every relationship we build.</p>
+      </div>
+      <ul class="values">
+        {values.map((v) => <li><h3>{v.title}</h3><p>{v.body}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Get started">
+    <div class="wrap cta-pair">
+      <div class="cta-card cta-card--gold">
+        <h2>Ready to partner with Lion King?</h2>
+        <p>Whether you need freight moved or a driving career, we are here for you.</p>
+        <div class="btn-row">
+          <a class="btn btn--white" href={url('contact/')}>Get a quote</a>
+          <a class="btn btn--light" href={url('careers/')}>View driver jobs</a>
+        </div>
+      </div>
+      <div class="cta-card cta-card--photo">
+        <Photo name="fleet-road" sizes="(min-width: 900px) 600px, 100vw" alt="" />
+        <h2>See our fleet</h2>
+        <p>Ten late-model Freightliner sleepers with GPS, ELDs and dash cams.</p>
+        <p><a class="btn btn--primary" href={url('fleet/')}>Our fleet</a></p>
+      </div>
+    </div>
+  </section>
+</Base>

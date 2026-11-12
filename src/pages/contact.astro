@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { company, links, fullAddress, hours } from '../data/site';
+import { url } from '../lib/url';
+---
+<Base
+  title="Contact and free quote | Lion King Transport Corp"
+  description={`Request a free freight quote from ${company.name}, or call dispatch 24/7 at ${company.phone}. Headquarters: ${fullAddress}.`}
+  current="contact"
+>
+  <section class="page-hero">
+    <Photo name="band-contact" widths={[800, 1600]} sizes="100vw" width={1600} height={900} alt="" eager />
+    <div class="wrap page-hero__inner">
+      <h1>Let's get your freight moving</h1>
+      <p class="lede">Tell us where the load picks up, where it delivers and what is in it. Our team replies by phone or email; dispatch is available 24/7 for urgent freight.</p>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="wrap form-layout">
+      <QuoteForm />
+
+      <aside class="dispatch-card" id="contact" aria-labelledby="contact-title">
+        <div>
+          <h2 id="contact-title">Talk to dispatch</h2>
+          <p>Prefer the phone? Dispatch answers 24/7 for urgent loads.</p>
+        </div>
+        <a class="dispatch-card__phone" href={company.phoneHref}>
+          <span class="dispatch-card__icon"><Icon name="phone" /></span>{company.phone}
+        </a>
+        <ul class="dispatch-list">
+          <li><Icon name="mail" /><div><span>Email</span><a href={`mailto:${company.email}`}>{company.email}</a></div></li>
+          <li><Icon name="pin" /><div><span>Headquarters</span><a href={links.maps} target="_blank" rel="noopener">{fullAddress}</a></div></li>
+          <li><Icon name="clock" /><div><span>Office hours</span>
+            <dl class="hours">
+              {hours.map((h) => <div><dt>{h.days}</dt><dd>{h.time}</dd></div>)}
+            </dl>
+          </div></li>
+        </ul>
+        <p class="dispatch-card__note">Looking for a driving job? This form is for shippers. <a href={url('careers/#apply')}>Apply on the careers page</a>.</p>
+      </aside>
+    </div>
+  </section>
+</Base>

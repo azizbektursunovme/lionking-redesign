@@ -1,0 +1,352 @@
+---
+// Shipper quote form. Sends JSON to PUBLIC_QUOTE_ENDPOINT (agree on it with the backend developer).
+// With no endpoint configured it runs in preview mode and sends nothing.
+// Preview a state with ?state=error or ?state=sending.
+import Icon from './Icon.astro';
+import { company } from '../data/site';
+import { url } from '../lib/url';
+
+const endpoint = import.meta.env.PUBLIC_QUOTE_ENDPOINT ?? '';
+---
+<div class="quote quote-card" data-endpoint={endpoint}>
+  {!endpoint && (
+    <p class="form-note" id="preview-note">
+      <Icon name="info" />
+      <span><strong>Preview mode.</strong> This form is not connected to a server yet, so nothing you type is sent.</span>
+    </p>
+  )}
+
+  <form class="form" id="quote-form" novalidate>
+    <div class="alert alert--error" id="form-error" role="alert" tabindex="-1" hidden>
+      <strong>Your request was not sent.</strong>
+      <span>Check your connection and try again, or call dispatch at <a href={company.phoneHref}>{company.phone}</a>.</span>
+    </div>
+
+    <p class="alert alert--info" id="prefill-note" hidden>
+      <span>We filled in the details you entered on the home page. Add the load and your contact details below.</span>
+    </p>
+
+    <fieldset class="step" id="load" aria-labelledby="step-load">
+      <div class="step__head">
+        <span class="step__num" aria-hidden="true">1</span>
+        <div>
+          <h2 class="step__title" id="step-load">Load details</h2>
+          <p class="step__hint">Where the freight goes and what is in the trailer.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label class="label" for="pickup">Pickup city or ZIP</label>
+          <div class="input-wrap">
+            <Icon name="origin" />
+            <input class="input" id="pickup" name="pickup" autocomplete="off" required placeholder="Columbus, OH 43235" aria-describedby="pickup-err" />
+          </div>
+          <p class="field-error" id="pickup-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="delivery">Delivery city or ZIP</label>
+          <div class="input-wrap">
+            <Icon name="pin" />
+            <input class="input" id="delivery" name="delivery" autocomplete="off" required placeholder="Dallas, TX 75201" aria-describedby="delivery-err" />
+          </div>
+          <p class="field-error" id="delivery-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="pickupDate">Pickup date</label>
+          <input class="input" id="pickupDate" name="pickupDate" type="date" required aria-describedby="pickupDate-err" />
+          <p class="field-error" id="pickupDate-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="weight">Approximate weight <span class="opt">(optional)</span></label>
+          <div class="input-wrap input-wrap--suffix">
+            <Icon name="weight" />
+            <input class="input" id="weight" name="weight" inputmode="numeric" pattern="[0-9,]{1,6}" placeholder="38,000" aria-describedby="weight-err" />
+            <span class="suffix" aria-hidden="true">lbs</span>
+          </div>
+          <p class="field-error" id="weight-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="freightType">Freight type</label>
+          <select class="input" id="freightType" name="freightType" required aria-describedby="freightType-err">
+            <option value="">Choose freight type</option>
+            <option>General freight (palletized)</option>
+            <option>Packages and parcels</option>
+            <option>Retail and consumer goods</option>
+            <option>Food and beverage (dry)</option>
+            <option>Industrial and building materials</option>
+            <option>Automotive parts</option>
+            <option>Other</option>
+          </select>
+          <p class="field-error" id="freightType-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="commodity">What exactly are you shipping?</label>
+          <div class="input-wrap">
+            <Icon name="box" />
+            <input class="input" id="commodity" name="commodity" required placeholder="22 pallets of boxed goods" aria-describedby="commodity-err" />
+          </div>
+          <p class="field-error" id="commodity-err"></p>
+        </div>
+        <div class="field span-2" role="radiogroup" aria-labelledby="equipment-label">
+          <span class="label" id="equipment-label">Equipment</span>
+          <div class="choice-cards choice-cards--3">
+            <label class="choice-card">
+              <input type="radio" name="equipment" value="semi-53ft" checked />
+              <span><strong>Semi-truck</strong><span>53 ft trailer, full truckload or long haul</span></span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="equipment" value="cargo-van" />
+              <span><strong>Cargo van</strong><span>Last-mile and small loads</span></span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="equipment" value="not-sure" />
+              <span><strong>Not sure</strong><span>Dispatch will suggest the right truck</span></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="step" aria-labelledby="step-contact">
+      <div class="step__head">
+        <span class="step__num" aria-hidden="true">2</span>
+        <div>
+          <h2 class="step__title" id="step-contact">Your contact details</h2>
+          <p class="step__hint">Dispatch sends the rate to this phone or email.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label class="label" for="name">Your name</label>
+          <div class="input-wrap">
+            <Icon name="user" />
+            <input class="input" id="name" name="name" autocomplete="name" required aria-describedby="name-err" />
+          </div>
+          <p class="field-error" id="name-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="company">Company <span class="opt">(optional)</span></label>
+          <div class="input-wrap">
+            <Icon name="building" />
+            <input class="input" id="company" name="company" autocomplete="organization" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="email">Email</label>
+          <div class="input-wrap">
+            <Icon name="mail" />
+            <input class="input" id="email" name="email" type="email" autocomplete="email" required placeholder="name@company.com" aria-describedby="email-err" />
+          </div>
+          <p class="field-error" id="email-err"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="phone">Phone</label>
+          <div class="input-wrap">
+            <Icon name="phone" />
+            <input class="input" id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="(614) 555-0100" pattern="[0-9()+.\s-]{10,20}" aria-describedby="phone-err" />
+          </div>
+          <p class="field-error" id="phone-err"></p>
+        </div>
+        <div class="field span-2">
+          <label class="label" for="notes">Anything else dispatch should know? <span class="opt">(optional)</span></label>
+          <div class="input-wrap input-wrap--top">
+            <Icon name="note" />
+            <textarea class="input" id="notes" name="notes" rows="3" placeholder="Dock hours, appointment, special handling"></textarea>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="step step--send">
+      <label class="consent">
+        <input type="checkbox" name="smsConsent" value="yes" />
+        <span>
+          <strong>Text me about this quote (optional).</strong>{' '}
+          {company.legalName} may send text messages about your request and shipment. Message frequency varies.
+          Message and data rates may apply. Reply STOP to opt out or HELP for help. You do not need to agree to
+          get a quote. See our <a href={url('privacy-policy/')}>Privacy Policy</a> and <a href={url('terms-of-service/')}>Terms of Service</a>.
+        </span>
+      </label>
+      <div class="form-actions">
+        <button class="btn btn--primary btn--lg" type="submit" id="quote-submit">Request quote</button>
+        <p class="hint">Dispatch replies by phone or email.</p>
+        <span class="sr-only" id="quote-status" aria-live="polite"></span>
+      </div>
+    </div>
+  </form>
+
+  <div class="success" id="quote-success" hidden>
+    <span class="success__icon"><Icon name="check" /></span>
+    <h2 tabindex="-1" id="success-title">Quote request sent</h2>
+    <p id="success-summary"></p>
+    <p>Dispatch will reply by phone or email. For a same-day load, call <a href={company.phoneHref}>{company.phone}</a>.</p>
+    <p class="hint" id="success-preview" hidden>Preview mode: nothing was actually sent.</p>
+    <p><button class="btn btn--outline btn--small" type="button" id="quote-again">Request another quote</button></p>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.quote');
+  const form = document.getElementById('quote-form') as HTMLFormElement | null;
+
+  if (root && form) {
+    const endpoint = root.dataset.endpoint || '';
+    const submit = document.getElementById('quote-submit') as HTMLButtonElement;
+    const status = document.getElementById('quote-status')!;
+    const errorBox = document.getElementById('form-error')!;
+    const success = document.getElementById('quote-success')!;
+    const successTitle = document.getElementById('success-title')!;
+    const summary = document.getElementById('success-summary')!;
+    const previewNote = document.getElementById('success-preview')!;
+    const previewBanner = document.getElementById('preview-note');
+    const again = document.getElementById('quote-again')!;
+    const forced = new URLSearchParams(location.search).get('state');
+
+    // Pickup date cannot be in the past.
+    const date = form.elements.namedItem('pickupDate') as HTMLInputElement;
+    const today = new Date();
+    date.min = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+
+    // Prefill from the home page quick form (sessionStorage), or from URL params when storage is blocked.
+    let draft: Record<string, string> = {};
+    try {
+      draft = JSON.parse(sessionStorage.getItem('tlQuoteDraft') || '{}');
+      sessionStorage.removeItem('tlQuoteDraft');
+    } catch { /* storage unavailable */ }
+    const params = new URLSearchParams(location.search);
+    let filled = 0;
+    for (const key of ['pickup', 'delivery', 'pickupDate', 'phone']) {
+      const v = draft[key] || (key !== 'phone' ? params.get(key) : '') || '';
+      const el = form.elements.namedItem(key) as HTMLInputElement | null;
+      if (v && el && !el.value) { el.value = v; filled++; }
+    }
+    if (filled) {
+      document.getElementById('prefill-note')!.hidden = false;
+      (form.elements.namedItem('commodity') as HTMLInputElement).focus({ preventScroll: true });
+    }
+
+    const messages: Record<string, string> = {
+      pickup: 'Enter the pickup city or ZIP code.',
+      delivery: 'Enter the delivery city or ZIP code.',
+      pickupDate: 'Choose a pickup date from today onward.',
+      commodity: 'Tell us what is in the load.',
+      freightType: 'Choose the type of freight.',
+      weight: 'Use numbers only, for example 38000.',
+      name: 'Enter your name.',
+      email: 'Enter an email address like name@company.com.',
+      phone: 'Enter a phone number with area code, for example 614 555 0100.',
+    };
+
+    const showError = (input: HTMLInputElement, msg: string) => {
+      input.setAttribute('aria-invalid', 'true');
+      const slot = document.getElementById(`${input.name}-err`);
+      if (slot) slot.textContent = msg;
+    };
+    const clearError = (input: HTMLInputElement) => {
+      input.removeAttribute('aria-invalid');
+      const slot = document.getElementById(`${input.name}-err`);
+      if (slot) slot.textContent = '';
+    };
+
+    const validate = () => {
+      let first: HTMLInputElement | null = null;
+      for (const el of Array.from(form.querySelectorAll<HTMLInputElement>('input.input, textarea.input, select.input'))) {
+        const blank = el.required && !el.value.trim();
+        if (!blank && el.checkValidity()) { clearError(el); continue; }
+        showError(el, messages[el.name] || 'Check this field.');
+        first ??= el;
+      }
+      first?.focus();
+      return !first;
+    };
+
+    form.addEventListener('input', (e) => {
+      const el = e.target as HTMLInputElement;
+      if (el.getAttribute('aria-invalid') === 'true' && el.checkValidity()) clearError(el);
+    });
+
+    const setSending = (on: boolean) => {
+      submit.disabled = on;
+      submit.textContent = on ? 'Sending request…' : 'Request quote';
+      form.setAttribute('aria-busy', String(on));
+      status.textContent = on ? 'Sending your request.' : '';
+    };
+
+    const send = async (payload: Record<string, unknown>) => {
+      if (!endpoint) {
+        if (forced === 'sending') return new Promise<void>(() => {});
+        await new Promise((r) => setTimeout(r, 900));
+        if (forced === 'error') throw new Error('preview error');
+        return;
+      }
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.hidden = true;
+      if (!validate()) return;
+
+      const data = new FormData(form);
+      const payload = {
+        pickup: data.get('pickup'),
+        delivery: data.get('delivery'),
+        pickupDate: data.get('pickupDate'),
+        freightType: data.get('freightType'),
+        equipment: data.get('equipment'),
+        commodity: data.get('commodity'),
+        weightLbs: data.get('weight') ? Number(String(data.get('weight')).replace(/,/g, '')) : null,
+        name: data.get('name'),
+        company: data.get('company') || null,
+        email: data.get('email'),
+        phone: data.get('phone'),
+        notes: data.get('notes') || null,
+        smsConsent: data.get('smsConsent') === 'yes',
+        source: 'website-quote-form',
+        submittedAt: new Date().toISOString(),
+      };
+
+      setSending(true);
+      try {
+        await send(payload);
+        summary.textContent = `Load from ${payload.pickup} to ${payload.delivery}, pickup ${payload.pickupDate}.`;
+        previewNote.hidden = Boolean(endpoint);
+        form.hidden = true;
+        if (previewBanner) previewBanner.hidden = true;
+        success.hidden = false;
+        successTitle.focus();
+      } catch {
+        errorBox.hidden = false;
+        errorBox.focus();
+      } finally {
+        setSending(false);
+      }
+    });
+
+    again.addEventListener('click', () => {
+      form.reset();
+      success.hidden = true;
+      form.hidden = false;
+      if (previewBanner) previewBanner.hidden = false;
+      (form.elements.namedItem('pickup') as HTMLInputElement).focus();
+    });
+
+    if (forced === 'error' || forced === 'sending') {
+      status.textContent = `Preview: submit the form to see the "${forced}" state.`;
+    }
+  }
+</script>

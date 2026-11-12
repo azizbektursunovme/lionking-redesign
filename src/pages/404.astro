@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { company } from '../data/site';
+import { url } from '../lib/url';
+---
+<Base title="Page not found | Lion King Transport Corp" description="This page does not exist." noindex>
+  <section class="page-hero page-hero--plain notfound">
+    <div class="wrap page-hero__inner">
+      <img class="notfound__crest" src={url('brand/apple-touch-icon.png')} width="180" height="180" alt="" />
+      <p class="notfound__code">Error 404</p>
+      <h1>This road doesn't go anywhere</h1>
+      <p class="lede">The page you are looking for has moved or never existed. Pick a route below, or call dispatch at {company.phone}.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('/')}>Go to the home page</a>
+        <a class="btn btn--light" href={url('contact/')}>Get a quote</a>
+        <a class="btn btn--light" href={url('careers/')}>Driver jobs</a>
+      </div>
+    </div>
+  </section>
+</Base>

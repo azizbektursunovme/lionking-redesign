@@ -1,0 +1,137 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroQuote from '../components/HeroQuote.astro';
+import UsMap from '../components/UsMap.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { company, stats, services, reasons, regions, reviews, links } from '../data/site';
+import { url } from '../lib/url';
+
+const heroDesktop = [960, 1440, 1920].map((w) => `${url(`photos/hero-${w}.webp`)} ${w}w`).join(', ');
+const heroMobile = [600, 900].map((w) => `${url(`photos/hero-m-${w}.webp`)} ${w}w`).join(', ');
+---
+<Base
+  title="Lion King Transport Corp | Reliable freight and nationwide logistics"
+  description={`Last-mile delivery, long-haul trucking, dispatch and freight management across all 48 states from ${company.city}, Ohio. Call ${company.phone} or request a quote.`}
+  current="home"
+  preload={[
+    { srcset: heroMobile, sizes: '100vw', media: '(max-width: 959px)' },
+    { srcset: heroDesktop, sizes: '66vw', media: '(min-width: 960px)' },
+  ]}
+>
+  <section class="hero" aria-labelledby="hero-title">
+    <picture class="hero__media">
+      <source media="(max-width: 959px)" srcset={heroMobile} sizes="100vw" />
+      <img src={url('photos/hero-1440.webp')} srcset={heroDesktop} sizes="(min-width: 960px) 66vw, 100vw" width="1920" height="1080" alt="" fetchpriority="high" decoding="async" />
+    </picture>
+    <div class="wrap hero__inner">
+      <div class="hero__copy">
+        <h1 id="hero-title">Reliable freight. Nationwide delivery.</h1>
+        <p class="lede">{company.name} moves your cargo safely and on time, from last-mile packages to long-haul freight across all 48 states.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={url('contact/')}>Get a quote</a>
+          <a class="btn btn--light" href={url('careers/')}>Drive with us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap qq-wrap">
+    <HeroQuote />
+  </div>
+
+  <div class="wrap stats-wrap">
+    <ul class="stats" aria-label="Company facts">
+      {stats.map((s) => (
+        <li><span class="stats__value">{s.value}</span><span class="stats__label">{s.label}</span></li>
+      ))}
+    </ul>
+  </div>
+
+  <section class="section" aria-labelledby="services-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="services-title">Complete logistics solutions</h2>
+        <p>From local last-mile delivery to cross-country freight, one dispatch team and one phone number for every load.</p>
+      </div>
+      <ul class="cards">
+        {services.map((s) => (
+          <li class="card">
+            <Photo class="card__img" name={s.photo} alt="" />
+            <div class="card__body">
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+              <a class="link-more" href={url(`services/#${s.id}`)}>Learn more<span class="sr-only"> about {s.title.toLowerCase()}</span></a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--dark" id="coverage" aria-labelledby="coverage-title">
+    <div class="wrap coverage">
+      <div class="coverage__copy">
+        <h2 id="coverage-title">Coverage across all 48 states</h2>
+        <p>Our trucks run coast to coast from our headquarters in {company.city}, Ohio. Have a lane in mind? Call dispatch and ask.</p>
+        <dl class="regions">
+          {regions.map((r) => (
+            <div>
+              <dt>{r.name}</dt>
+              <dd>{r.states.join(', ')}</dd>
+            </div>
+          ))}
+        </dl>
+        <p><a class="btn btn--primary" href={company.phoneHref}>Call dispatch {company.phone}</a></p>
+      </div>
+      <UsMap />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="why-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="why-title">Why shippers choose Lion King</h2>
+        <p>
+          We build long-term partnerships on reliable service and clear communication.
+          {company.dot && <> Our operating authority: USDOT {company.dot}{company.mc && <>, MC {company.mc}</>}{links.fmcsa && <> (<a href={links.fmcsa} target="_blank" rel="noopener">FMCSA record</a>)</>}.</>}
+        </p>
+      </div>
+      <ul class="features">
+        {reasons.map((r) => (
+          <li class="feature">
+            <span class="feature__icon"><Icon name={r.icon} /></span>
+            <h3>{r.title}</h3>
+            <p>{r.body}</p>
+          </li>
+        ))}
+      </ul>
+      {reviews.length > 0 && (
+        <ul class="features" style="margin-top:48px">
+          {reviews.map((r) => (
+            <li class="feature"><blockquote style="margin:0"><p>{r.quote}</p><p class="muted">{r.name}, {r.company}</p></blockquote></li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-label="Get started">
+    <div class="wrap cta-pair">
+      <div class="cta-card cta-card--photo">
+        <Photo name="band-careers" widths={[800, 1600]} sizes="(min-width: 900px) 600px, 100vw" width={1600} height={900} alt="" />
+        <h2>Drive with Lion King</h2>
+        <p>Weekly pay every Friday, flexible routes and late-model Freightliner trucks.</p>
+        <p><a class="btn btn--primary" href={url('careers/')}>See jobs and apply</a></p>
+      </div>
+      <div class="cta-card cta-card--gold">
+        <h2>Ready to ship?</h2>
+        <p>Tell us the pickup, the delivery and what is in the load. Dispatch replies with a plan and a rate.</p>
+        <div class="btn-row">
+          <a class="btn btn--white" href={url('contact/')}>Get a quote</a>
+          <a class="btn btn--light" href={company.phoneHref}>{company.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { company, services, steps, industries } from '../data/site';
+import { url } from '../lib/url';
+---
+<Base
+  title="Services | Lion King Transport Corp"
+  description="Last-mile delivery, long-haul trucking, dispatch services and freight management across all 48 states from Lion King Transport Corp."
+  current="services"
+>
+  <section class="page-hero">
+    <Photo name="band-services" widths={[800, 1440]} sizes="100vw" width={1440} height={810} alt="" eager />
+    <div class="wrap page-hero__inner">
+      <h1>Complete freight solutions</h1>
+      <p class="lede">From a single package to a full truckload, we keep your supply chain moving. One dispatch team, one phone number: {company.phone}.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('contact/')}>Get a quote</a>
+        <a class="btn btn--light" href={company.phoneHref}>Call us now</a>
+      </div>
+    </div>
+  </section>
+
+  {services.map((s, i) => (
+    <section class={i % 2 ? 'section section--soft' : 'section'} id={s.id} aria-labelledby={`${s.id}-title`}>
+      <div class={i % 2 ? 'wrap split split--reverse' : 'wrap split'}>
+        <div class="split__copy">
+          <h2 id={`${s.id}-title`}>{s.title}</h2>
+          <p>{s.body}</p>
+          <ul class="checks">
+            {s.points.map((p) => <li>{p}</li>)}
+          </ul>
+          <p><a class="btn btn--primary" href={url('contact/')}>Request this service</a></p>
+        </div>
+        <Photo class="split__img" name={s.photo} sizes="(min-width: 900px) 560px, 100vw" alt="" />
+      </div>
+    </section>
+  ))}
+
+  <section class="section section--dark" aria-labelledby="process-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="process-title">How it works</h2>
+        <p>Getting your freight moving with Lion King takes five steps.</p>
+      </div>
+      <ol class="process">
+        {steps.map((s) => (
+          <li><h3>{s.title}</h3><p>{s.body}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="industries-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="industries-title">Industries we serve</h2>
+        <p>Freight for businesses of every size, from online stores to manufacturers.</p>
+      </div>
+      <ul class="chips">
+        {industries.map((x) => <li>{x}</li>)}
+      </ul>
+      <div class="btn-row" style="margin-top:40px">
+        <a class="btn btn--primary" href={url('contact/')}>Get a free quote</a>
+        <a class="btn btn--outline" href={company.phoneHref}>Call {company.phone}</a>
+      </div>
+    </div>
+  </section>
+</Base>

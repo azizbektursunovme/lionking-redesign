@@ -1,0 +1,109 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import ApplyForm from '../components/ApplyForm.astro';
+import { company, careers } from '../data/site';
+---
+<Base
+  title="Careers: drive with Lion King Transport Corp"
+  description={`Company driver, owner operator and lease driver jobs with ${company.name}. Weekly pay every Friday and late-model Freightliner trucks. Apply online.`}
+  current="careers"
+>
+  <section class="page-hero">
+    <Photo name="band-careers" widths={[800, 1600]} sizes="100vw" width={1600} height={900} alt="" eager />
+    <div class="wrap page-hero__inner">
+      <h1>Drive with Lion King</h1>
+      <p class="lede">Weekly pay, flexible routes and a team that values its drivers. Apply online in a few minutes.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="#apply">Apply now</a>
+        <a class="btn btn--light" href="#positions">See open positions</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap stats-wrap">
+    <ul class="stats stats--3" aria-label="Driver facts">
+      {careers.stats.map((s) => <li><span class="stats__value">{s.value}</span><span class="stats__label">{s.label}</span></li>)}
+    </ul>
+  </div>
+
+  <section class="section" aria-labelledby="benefits-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="benefits-title">Benefits that matter</h2>
+        <p>We don't just hire drivers, we build careers. Here is what you get when you join Lion King.</p>
+      </div>
+      <ul class="features features--3">
+        {careers.benefits.map((b) => (
+          <li class="feature">
+            <span class="feature__icon"><Icon name={b.icon} /></span>
+            <h3>{b.title}</h3>
+            <p>{b.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--soft" id="positions" aria-labelledby="positions-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="positions-title">Open positions</h2>
+        <p>Choose the role that fits you and apply below.</p>
+      </div>
+      <ul class="roles">
+        {careers.roles.map((r) => (
+          <li class="role">
+            <span class="role__type">{r.type}</span>
+            <h3>{r.title}</h3>
+            <p>{r.body}</p>
+            <a class="link-more" href="#apply" data-position={r.id}>Apply as {r.title.toLowerCase()}</a>
+          </li>
+        ))}
+      </ul>
+      <div class="requirements">
+        <h3>Basic requirements</h3>
+        <ul class="checks checks--2">
+          {careers.requirements.map((x) => <li>{x}</li>)}
+        </ul>
+        <p class="muted">No CDL yet? Ask about our CDL sponsorship program.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="apply" aria-labelledby="apply-title">
+    <div class="wrap form-layout">
+      <div>
+        <div class="head-split" style="margin-bottom:24px;grid-template-columns:1fr">
+          <h2 id="apply-title">Apply now</h2>
+          <p>Fill out the form and our recruiting team will contact you.</p>
+        </div>
+        <ApplyForm />
+      </div>
+      <aside class="dispatch-card" aria-labelledby="recruit-title">
+        <div>
+          <h2 id="recruit-title">Talk to recruiting</h2>
+          <p>Prefer to call? We are happy to answer your questions first.</p>
+        </div>
+        <a class="dispatch-card__phone" href={company.phoneHref}>
+          <span class="dispatch-card__icon"><Icon name="phone" /></span>{company.phone}
+        </a>
+        <ul class="dispatch-list">
+          <li><Icon name="mail" /><div><span>Email</span><a href={`mailto:${company.email}?subject=Driver%20application`}>{company.email}</a></div></li>
+          <li><Icon name="pin" /><div><span>Headquarters</span><strong>{company.city}, {company.state}</strong></div></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // "Apply as …" links preselect the position in the form.
+  document.querySelectorAll<HTMLAnchorElement>('a[data-position]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const select = document.getElementById('a-position') as HTMLSelectElement | null;
+      if (select) select.value = a.dataset.position || '';
+    });
+  });
+</script>

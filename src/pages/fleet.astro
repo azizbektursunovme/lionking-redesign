@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { fleet } from '../data/site';
+import { url } from '../lib/url';
+---
+<Base
+  title="Our fleet | Lion King Transport Corp"
+  description="Ten late-model Freightliner sleeper trucks, all GPS equipped with ELDs and dash cameras, ready for long-haul freight."
+  current="fleet"
+>
+  <section class="page-hero">
+    <Photo name="band-fleet" widths={[800, 1440]} sizes="100vw" width={1440} height={810} alt="" eager />
+    <div class="wrap page-hero__inner">
+      <h1>Modern equipment, reliable performance</h1>
+      <p class="lede">Our fleet of {fleet.count} late-model Freightliner sleepers is maintained to keep every delivery safe and on time.</p>
+    </div>
+  </section>
+
+  <div class="wrap stats-wrap">
+    <ul class="stats stats--3" aria-label="Fleet facts">
+      {fleet.stats.map((s) => <li><span class="stats__value">{s.value}</span><span class="stats__label">{s.label}</span></li>)}
+    </ul>
+  </div>
+
+  <section class="section" aria-labelledby="inventory-title">
+    <div class="wrap split">
+      <div class="split__copy">
+        <h2 id="inventory-title">{fleet.count} × {fleet.type}</h2>
+        <p><strong>{fleet.make}</strong> trucks, built for long-haul OTR freight.</p>
+        <ul class="checks checks--2">
+          {fleet.features.map((f) => <li>{f}</li>)}
+        </ul>
+      </div>
+      <figure class="fleet-photo">
+        <Photo class="split__img" name="fleet-main" widths={[480, 800, 1200]} sizes="(min-width: 900px) 560px, 100vw" width={1200} height={900} alt="Freightliner Cascadia sleeper truck" />
+        <figcaption>Sample photo</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="tech-title">
+    <div class="wrap">
+      <div class="head-split">
+        <h2 id="tech-title">Technology and safety</h2>
+        <p>Every truck carries the same tracking, logging and camera equipment.</p>
+      </div>
+      <ul class="features">
+        {fleet.tech.map((t) => (
+          <li class="feature">
+            <span class="feature__icon"><Icon name={t.icon} /></span>
+            <h3>{t.title}</h3>
+            <p>{t.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Get started">
+    <div class="wrap cta-pair">
+      <div class="cta-card cta-card--photo">
+        <Photo name="fleet-road" sizes="(min-width: 900px) 600px, 100vw" alt="" />
+        <h2>Need freight moved?</h2>
+        <p>Our fleet is ready. Let's talk about moving your cargo.</p>
+        <p><a class="btn btn--primary" href={url('contact/')}>Get a quote</a></p>
+      </div>
+      <div class="cta-card cta-card--gold">
+        <h2>Drive our fleet</h2>
+        <p>Company drivers, owner operators and lease drivers are welcome to apply.</p>
+        <p><a class="btn btn--white" href={url('careers/#apply')}>Apply to drive</a></p>
+      </div>
+    </div>
+  </section>
+</Base>

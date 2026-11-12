@@ -1,0 +1,115 @@
+---
+import Icon from './Icon.astro';
+import { company } from '../data/site';
+import { url } from '../lib/url';
+
+interface Props { current: string }
+const { current } = Astro.props;
+
+// Absolute links (with base) so the menu works on every page, including the legal pages.
+const items = [
+  { href: url('services/'), label: 'Services', key: 'services' },
+  { href: url('fleet/'), label: 'Fleet', key: 'fleet' },
+  { href: url('careers/'), label: 'Careers', key: 'careers' },
+  { href: url('about/'), label: 'About', key: 'about' },
+  { href: url('contact/'), label: 'Contact', key: 'contact' },
+];
+---
+<div class="topbar">
+  <div class="wrap topbar__inner">
+    <p>
+      Headquarters: <strong>{company.city}, {company.state}</strong>
+      {company.dot && <> <strong>USDOT {company.dot}</strong></>}
+      {company.mc && <> <strong>MC {company.mc}</strong></>}
+    </p>
+    <ul>
+      <li><a href={`mailto:${company.email}`}>{company.email}</a></li>
+      <li>Dispatch 24/7</li>
+    </ul>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap site-header__bar">
+    <a class="brand" href={url('/')} aria-label={`${company.name} home`}>
+      <img
+        src={url('brand/logo-300.webp')}
+        srcset={`${url('brand/logo-300.webp')} 1x, ${url('brand/logo-600.webp')} 2x`}
+        width="300" height="87" alt=""
+      />
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul>
+        {items.map((i) => (
+          <li><a href={i.href} aria-current={current === i.key ? 'page' : undefined}>{i.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-phone" href={company.phoneHref} aria-label={`Call ${company.phone}`}><Icon name="phone" /><span class="header-phone__num">{company.phone}</span></a>
+      <a class="btn btn--primary btn--small" href={url('contact/')}>Get a quote</a>
+    </div>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-panel">
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+      Menu
+    </button>
+  </div>
+
+  <div class="nav-panel" id="nav-panel" hidden>
+    <div class="wrap">
+      <nav aria-label="Main (mobile)">
+        <ul>
+          {items.map((i) => (
+            <li><a href={i.href} aria-current={current === i.key ? 'page' : undefined}>{i.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('contact/')}>Get a quote</a>
+        <a class="btn btn--outline" href={url('careers/#apply')}>Drive with us</a>
+        <a class="btn btn--outline" href={company.phoneHref}>Call {company.phone}</a>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Runs before first paint: see-through header while the page is at the top. -->
+<script is:inline>(function(){var h=document.querySelector('.site-header');if(h&&window.scrollY<10)h.classList.add('is-top');})();</script>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const panel = document.getElementById('nav-panel');
+
+  if (header) {
+    let menuOpen = false;
+    let ticking = false;
+    // Solid white once the page is scrolled or the mobile menu is open; see-through at the very top.
+    const update = () => {
+      header.classList.toggle('is-top', window.scrollY < 10 && !menuOpen);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+
+    if (toggle && panel) {
+      const setOpen = (open: boolean) => {
+        menuOpen = open;
+        toggle.setAttribute('aria-expanded', String(open));
+        panel.hidden = !open;
+        update();
+      };
+      toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+      panel.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('a')) setOpen(false);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !panel.hidden) { setOpen(false); toggle.focus(); }
+      });
+    }
+  }
+</script>

@@ -1,0 +1,32 @@
+---
+// Real map of the 48 contiguous states (data: src/data/us-map.json, built by scripts/build-us-map.mjs).
+// Served states use the light fill, the home state is gold, and a pin marks Columbus, OH.
+import map from '../data/us-map.json';
+import { company, regions } from '../data/site';
+
+const served = new Set(regions.flatMap((r) => r.states));
+const cls = (abbr: string) =>
+  abbr === company.state ? 'usmap__state usmap__state--hq' : served.has(abbr) ? 'usmap__state' : 'usmap__state usmap__state--off';
+const { x, y } = map.hq;
+---
+<figure class="usmap">
+  <svg viewBox={map.viewBox} role="img" aria-labelledby="usmap-title">
+    <title id="usmap-title">Map of the {served.size} contiguous states we serve, with our headquarters in {company.city}, Ohio</title>
+    <g>
+      {map.states.map((s) => (
+        <path class={cls(s.abbr)} d={s.d}><title>{s.name}</title></path>
+      ))}
+    </g>
+    <g class="usmap__pin" transform={`translate(${x} ${y})`} aria-hidden="true">
+      <circle class="usmap__ring" r="15" />
+      <circle class="usmap__dot" r="6" />
+      <text class="usmap__label" x="22" y="-14">{company.city}, {company.state}</text>
+    </g>
+  </svg>
+  <figcaption>
+    <ul class="map-key">
+      <li><i aria-hidden="true"></i>Served ({served.size} states)</li>
+      <li><i class="key-hq" aria-hidden="true"></i>Headquarters: {company.city}, {company.state}</li>
+    </ul>
+  </figcaption>
+</figure>

@@ -1,0 +1,30 @@
+---
+// Responsive WebP image from public/photos/<name>-<width>.webp.
+import { url } from '../lib/url';
+
+interface Props {
+  name: string;
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  width?: number;
+  height?: number;
+  eager?: boolean;
+  class?: string;
+}
+const { name, alt, widths = [480, 800], sizes = '(min-width: 1100px) 280px, (min-width: 640px) 45vw, 112px', width = 800, height = 600, eager = false, class: className } = Astro.props;
+const srcset = widths.map((w) => `${url(`photos/${name}-${w}.webp`)} ${w}w`).join(', ');
+const src = url(`photos/${name}-${widths[widths.length - 1]}.webp`);
+---
+<img
+  class={className}
+  src={src}
+  srcset={srcset}
+  sizes={sizes}
+  width={width}
+  height={height}
+  alt={alt}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
+  fetchpriority={eager ? 'high' : undefined}
+/>

@@ -1,0 +1,121 @@
+---
+// Design system reference for the team. Not linked from the site and not indexed.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+
+const colors = [
+  { name: 'Dark 900', token: '--dark-900', hex: '#0E0E10', use: 'Top bar, hero, footer' },
+  { name: 'Dark 800', token: '--dark-800', hex: '#18181B', use: 'Coverage band, dispatch card' },
+  { name: 'Ink', token: '--ink', hex: '#18181B', use: 'Headings on light' },
+  { name: 'Text', token: '--text', hex: '#3F3F46', use: 'Body copy' },
+  { name: 'Muted', token: '--muted', hex: '#63636B', use: 'Secondary text' },
+  { name: 'Gold', token: '--gold', hex: '#C9A227', use: 'Logo gold: buttons (dark text), accents on dark' },
+  { name: 'Gold 700', token: '--gold-700', hex: '#7A5F0E', use: 'Gold text and links on white (6:1)' },
+  { name: 'Gold 300', token: '--gold-300', hex: '#E6C96A', use: 'Focus ring, hover, accents on dark' },
+  { name: 'Gold 50', token: '--gold-50', hex: '#FBF5E2', use: 'Icon circles, info alert' },
+  { name: 'Soft', token: '--soft', hex: '#F5F5F4', use: 'Alternate section background' },
+  { name: 'Line', token: '--line', hex: '#E4E4E7', use: 'Borders' },
+];
+const type = [
+  { token: '--fs-2xl', label: 'Hero h1, uppercase 800', size: '36–68px', sample: 'DRY VAN FREIGHT', weight: 800, upper: true },
+  { token: '--fs-xl', label: 'Section h2, uppercase 800', size: '28–44px', sample: 'COMPLETE LOGISTICS SOLUTIONS', weight: 800, upper: true },
+  { token: '--fs-lg', label: 'Card title', size: '24px, 700', sample: 'Get a fast freight rate', weight: 700, upper: false },
+  { token: '--fs-md', label: 'Lead, h3', size: '20px, 700', sample: 'Full truckload', weight: 700, upper: false },
+  { token: '--fs-base', label: 'Body', size: '17px / 1.6, 400', sample: 'The whole 53 ft trailer is yours.', weight: 400, upper: false },
+  { token: '--fs-sm', label: 'Small', size: '14px, 400', sample: 'Hint and label text', weight: 400, upper: false },
+];
+const space = [4, 8, 12, 16, 24, 32, 48, 64, 96];
+const icons = ['phone', 'mail', 'shield', 'gps', 'clock', 'route', 'truck', 'pallet', 'bolt'];
+---
+<Base title="Design system | Lion King Transport Corp" description="Design tokens and components for the Lion King website." noindex>
+  <section class="page-hero page-hero--plain">
+    <div class="wrap page-hero__inner">
+      <h1>Design system</h1>
+      <p class="lede">Black and gold from the Lion King logo, full-bleed truck photos, bold uppercase headings in Archivo. Source: src/styles/global.css.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="sg-color">
+    <div class="head-split"><h2 id="sg-color">Color</h2><p>Black and gold carry the brand. Gold on white is always the darker Gold 700 so it stays readable.</p></div>
+    <ul class="sg-swatches">
+      {colors.map((c) => (
+        <li><span class="sg-chip" style={`background:var(${c.token})`}></span><strong>{c.name}</strong><span class="muted">{c.hex} <code>{c.token}</code></span><span>{c.use}</span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="sg-type">
+    <div class="wrap">
+      <div class="head-split"><h2 id="sg-type">Type</h2><p>One family: Archivo (variable 100–900), self-hosted latin subset, 35 KB. Uppercase only for h1 and h2.</p></div>
+      <dl class="sg-type">
+        {type.map((t) => (
+          <div>
+            <dt><strong>{t.label}</strong><span class="muted">{t.size}</span><code>{t.token}</code></dt>
+            <dd style={`font-size:var(${t.token});font-weight:${t.weight};color:var(--ink);line-height:1.1;${t.upper ? 'text-transform:uppercase' : ''}`}>{t.sample}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="sg-space">
+    <div class="head-split"><h2 id="sg-space">Spacing and layout</h2><p>4px base. Content 1200px, gutter 16–40px. Breakpoints 640, 768, 900, 960 (hero 2 columns), 1024 (full header and top bar), 1100.</p></div>
+    <ul class="sg-space">
+      {space.map((s, i) => (<li><span style={`width:${s}px`}></span><code>--s{i + 1}</code> {s}px</li>))}
+    </ul>
+  </section>
+
+  <section class="section section--soft" aria-labelledby="sg-buttons">
+    <div class="wrap">
+      <div class="head-split"><h2 id="sg-buttons">Buttons and icons</h2><p>48px tall (42px small), radius 6px. The label says what happens.</p></div>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="#sg-buttons">Get a quote</a>
+        <a class="btn btn--outline" href="#sg-buttons">See all services</a>
+        <button class="btn btn--primary" disabled>Sending request…</button>
+      </div>
+      <div class="btn-row" style="margin-top:24px;background:var(--dark-800);padding:24px;border-radius:6px">
+        <a class="btn btn--white" href="#sg-buttons">See trucks and apply</a>
+        <a class="btn btn--light" href="#sg-buttons">Drive with us</a>
+      </div>
+      <ul class="sg-icons">
+        {icons.map((i) => (<li><span class="feature__icon"><Icon name={i} /></span><code>{i}</code></li>))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="sg-cards">
+    <div class="head-split"><h2 id="sg-cards">Cards and states</h2><p>Photo card, stats bar, alerts. Errors explain what to fix.</p></div>
+    <ul class="cards sg-cards">
+      <li class="card"><Photo class="card__img" name="svc-ftl" alt="" /><div class="card__body"><h3>Full truckload</h3><p>The whole trailer is yours.</p></div></li>
+      <li class="card"><Photo class="card__img" name="svc-partial" alt="" /><div class="card__body"><h3>Partial loads</h3><p>Pay for the space you use.</p></div></li>
+    </ul>
+    <div class="form" style="max-width:640px;margin-top:32px">
+      <div class="field">
+        <label class="label" for="sg-b">Delivery city or ZIP</label>
+        <input class="input" id="sg-b" aria-invalid="true" aria-describedby="sg-b-err" />
+        <p class="field-error" id="sg-b-err">Enter the delivery city or ZIP code.</p>
+      </div>
+      <p class="alert alert--error"><strong>Your request was not sent.</strong><span>Check your connection and try again, or call dispatch.</span></p>
+      <p class="alert alert--info"><span><strong>Preview mode.</strong> This form is not connected to a server yet.</span></p>
+      <div class="success"><h3>Quote request sent</h3><p>Dispatch will reply by phone or email.</p></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sg-swatches { list-style: none; display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .sg-swatches li { display: grid; gap: 4px; font-size: var(--fs-sm); }
+  .sg-chip { height: 64px; border: 1px solid var(--line); border-radius: 6px; }
+  .sg-type div { display: grid; gap: 8px; padding-block: 16px; border-top: 1px solid var(--line); }
+  .sg-type dt { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--fs-sm); }
+  .sg-type dd { margin: 0; }
+  .sg-space { list-style: none; display: grid; gap: 8px; }
+  .sg-space li { display: flex; align-items: center; gap: 12px; font-size: var(--fs-sm); }
+  .sg-space span { display: inline-block; height: 16px; background: var(--gold); border-radius: 2px; }
+  .sg-cards { max-width: 640px; }
+  @media (min-width: 640px) { .sg-cards { grid-template-columns: 1fr 1fr; } }
+  .sg-icons { list-style: none; display: flex; flex-wrap: wrap; gap: 24px; margin-top: 32px; }
+  .sg-icons li { display: grid; gap: 6px; justify-items: center; font-size: var(--fs-sm); }
+  code { font-size: .875em; background: var(--soft); padding: 1px 5px; border-radius: 3px; }
+</style>

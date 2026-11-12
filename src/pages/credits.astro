@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { photoCredits } from '../data/credits';
+---
+<Base title="Photo credits | Lion King Transport Corp" description="Sources and licenses of the photos used on this website." noindex>
+  <section class="page-hero page-hero--plain">
+    <div class="wrap page-hero__inner">
+      <h1>Photo credits</h1>
+      <p class="lede">The photos on this site are temporary stock images from Wikimedia Commons, used until our own photos of Lion King trucks and drivers are ready.</p>
+    </div>
+  </section>
+  <section class="section wrap legal">
+    <ul>
+      {photoCredits.map((c) => (
+        <li>
+          <strong>{c.use}:</strong> “{c.file}” by {c.author}, {c.licenseUrl ? <a href={c.licenseUrl} target="_blank" rel="noopener">{c.license}</a> : c.license},
+          via <a href={c.source} target="_blank" rel="noopener">Wikimedia Commons</a>. {c.changes}.
+        </li>
+      ))}
+    </ul>
+    <p><strong>Map:</strong> state boundaries from the U.S. Census Bureau via <a href="https://github.com/topojson/us-atlas" target="_blank" rel="noopener">us-atlas</a>, simplified.</p>
+  </section>
+</Base>

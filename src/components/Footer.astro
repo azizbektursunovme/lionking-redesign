@@ -1,0 +1,60 @@
+---
+import { company, links, fullAddress, services, social } from '../data/site';
+import { url } from '../lib/url';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src={url('brand/logo-300.webp')} width="300" height="87" alt="" loading="lazy" style="width:180px;height:auto" />
+        <p>Freight and logistics across all 48 states, from our headquarters in {company.city}, Ohio.</p>
+        {(company.dot || company.mc) && (
+          <p>{company.dot && <>USDOT {company.dot}<br /></>}{company.mc && <>MC {company.mc}</>}</p>
+        )}
+        {social.length > 0 && (
+          <ul class="footer-social">
+            {social.map((s) => <li><a href={s.href} rel="noopener" target="_blank">{s.name}</a></li>)}
+          </ul>
+        )}
+      </div>
+
+      <div class="footer-col">
+        <h2>Services</h2>
+        <ul>
+          {services.map((s) => <li><a href={url(`services/#${s.id}`)}>{s.title}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h2>Company</h2>
+        <ul>
+          <li><a href={url('about/')}>About us</a></li>
+          <li><a href={url('fleet/')}>Our fleet</a></li>
+          <li><a href={url('careers/')}>Careers</a></li>
+          <li><a href={url('careers/#apply')}>Drive with us</a></li>
+          {links.fmcsa && <li><a href={links.fmcsa} rel="noopener" target="_blank">FMCSA record</a></li>}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h2>Contact</h2>
+        <ul>
+          <li><a href={company.phoneHref}>{company.phone}</a></li>
+          <li><a href={`mailto:${company.email}`}>{company.email}</a></li>
+          <li><a href={links.maps} rel="noopener" target="_blank">{fullAddress}</a></li>
+          <li>Dispatch support 24/7</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <p>© {year} {company.legalName}. All rights reserved.</p>
+      <ul>
+        <li><a href={url('privacy-policy/')}>Privacy Policy</a></li>
+        <li><a href={url('terms-of-service/')}>Terms of Service</a></li>
+        <li><a href={url('credits/')}>Photo credits</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
