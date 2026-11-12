@@ -212,8 +212,8 @@ const endpoint = import.meta.env.PUBLIC_QUOTE_ENDPOINT ?? '';
     // Prefill from the home page quick form (sessionStorage), or from URL params when storage is blocked.
     let draft: Record<string, string> = {};
     try {
-      draft = JSON.parse(sessionStorage.getItem('tlQuoteDraft') || '{}');
-      sessionStorage.removeItem('tlQuoteDraft');
+      draft = JSON.parse(sessionStorage.getItem('lkQuoteDraft') || '{}');
+      sessionStorage.removeItem('lkQuoteDraft');
     } catch { /* storage unavailable */ }
     const params = new URLSearchParams(location.search);
     let filled = 0;

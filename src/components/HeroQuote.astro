@@ -72,7 +72,7 @@ import { url } from '../lib/url';
       const value = (id: string) => (document.getElementById(id) as HTMLInputElement).value.trim();
       const draft = { pickup: value('qq-pickup'), delivery: value('qq-delivery'), pickupDate: value('qq-date'), phone: value('qq-phone') };
       try {
-        sessionStorage.setItem('tlQuoteDraft', JSON.stringify(draft));
+        sessionStorage.setItem('lkQuoteDraft', JSON.stringify(draft));
         location.href = `${form.action.split('?')[0]}#load`;
       } catch {
         form.submit(); // storage blocked: carry route and date in the URL, never the phone
